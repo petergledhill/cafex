@@ -8,6 +8,7 @@ namespace CafeX
     {
         private static decimal FOOD_SERVICE_CHARGE = 0.1m;
         private static decimal HOT_FOOD_SERVICE_CHARGE = 0.2m;
+        private static decimal MAXIMUM_SERVICE_CHARGE = 20m;
 
         private static List<Product> Menu = new List<Product> {
             new Product( name : "Cola", cost : 0.5m, type : ProductType.Drink, isHot : false ),
@@ -43,7 +44,8 @@ namespace CafeX
                 multiplier = FOOD_SERVICE_CHARGE;
             }
 
-            return total * multiplier;       
+            var charge = Math.Round(total * multiplier, 2);
+            return Math.Min(charge, MAXIMUM_SERVICE_CHARGE);
         }
     }
 }

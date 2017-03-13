@@ -55,6 +55,20 @@ namespace CafeXTests
             Assert.Equal(2m, serviceCharge);
         }
 
+        [Fact]
+        public void CalculateServiceCharge_RoundsTo2Places()
+        {
+            var serviceCharge = Till.ServiceCharge(total: 0.99m, orderType: OrderType.ContainsHotFood);
+            Assert.Equal(0.2m, serviceCharge);
+        }
+
+        [Fact]
+        public void CalculateServiceCharge_ReturnsMaximum20PoundCharge()
+        {
+            var serviceCharge = Till.ServiceCharge(total: 400m, orderType: OrderType.ContainsHotFood);
+            Assert.Equal(20m, serviceCharge);
+        }
+
 
     }
 }
