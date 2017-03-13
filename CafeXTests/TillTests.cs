@@ -2,12 +2,14 @@ using System;
 using Xunit;
 using CafeX;
 using System.Collections.Generic;
-using Xunit.Extensions;
 
 namespace CafeXTests
 {
     public class TillTests
     {
+
+        #region CalculateBill
+
         public static IEnumerable<object[]> CalculateBillData
         {
             get
@@ -27,7 +29,8 @@ namespace CafeXTests
                 };
             }
         }
-
+        
+        // Theory to test each of the senarios outlined in CalculateBillData
         [Theory, MemberData("CalculateBillData")]
         public void CalculateBill(List<string> items, decimal expected)
         {
@@ -35,7 +38,26 @@ namespace CafeXTests
             Assert.Equal(expected, result);
         }
 
+        [Fact]
+        public void CalculateBill_ShouldHandleDuplicatesCorrectly()
+        {
+            var items = new List<string> { "Cheese Sandwich", "Cheese Sandwich" };
+            var result = Till.CalculateBill(items);
+            Assert.Equal(4.4m, result);
+        }
 
+        [Fact]
+        public void CalculateBill_ShouldHandleNullItemsCorrectly()
+        {
+            var items = new List<string> { "No Item" };
+            var exception = Record.Exception(() => Till.CalculateBill(items));
+            Assert.NotNull(exception);
+            Assert.IsType<NullReferenceException>(exception);
+        }
+
+        #endregion
+
+        #region ServiceCharge
 
         [Fact]
         public void ServiceCharge_Returns0Percent_AllDrinks()
@@ -72,7 +94,9 @@ namespace CafeXTests
             Assert.Equal(20m, serviceCharge);
         }
 
+        #endregion
 
+        #region GetOrderType
 
         [Fact]
         public void GetOrderType_Returns_AllDrinks_IfAllDrinks()
@@ -109,6 +133,7 @@ namespace CafeXTests
             Assert.Equal(OrderType.ContainsHotFood, orderType);
         }
 
+        #endregion
 
     }
 }

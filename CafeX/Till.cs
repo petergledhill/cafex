@@ -22,7 +22,7 @@ namespace CafeX
         /// </summary>                
         public static decimal CalculateBill(List<string> items)
         {
-            var products = Menu.FindAll(p => items.Contains(p.Name));  
+            var products = items.Select(i => Menu.Find(product => product.Name == i)).ToList();
             
             var total = products.Sum(p => p.Cost);
             var orderType = GetOrderType(products);
