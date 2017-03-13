@@ -14,7 +14,7 @@ namespace CafeX
             new Product( name : "Cola", cost : 0.5m, type : ProductType.Drink, isHot : false ),
             new Product( name : "Coffee", cost : 1m, type : ProductType.Drink, isHot : true ),
             new Product( name : "Cheese Sandwich", cost : 2m, type : ProductType.Food, isHot : false ),
-            new Product( name : "Steak Sandwich", cost : 0.5m, type : ProductType.Food, isHot : true )
+            new Product( name : "Steak Sandwich", cost : 4.5m, type : ProductType.Food, isHot : true )
         };
 
         /// <summary>
@@ -22,8 +22,13 @@ namespace CafeX
         /// </summary>                
         public static decimal CalculateBill(List<string> items)
         {
-            var products = Menu.FindAll(p => items.Contains(p.Name));           
-            return products.Sum(p => p.Cost);            
+            var products = Menu.FindAll(p => items.Contains(p.Name));  
+            
+            var total = products.Sum(p => p.Cost);
+            var orderType = GetOrderType(products);
+            var serviceCharge = ServiceCharge(total, orderType);
+
+            return total + serviceCharge;
         }
 
         /// <summary>

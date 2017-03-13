@@ -16,13 +16,14 @@ namespace CafeXTests
                 {
                     // no items returns 0
                     new object[] { new List<string> { }, 0m },
-                    // each item individually should return the price of that item
+                    // each item individually should return the price of that item inc service charge
                     new object[] { new List<string> { "Cola" }, 0.5m },
                     new object[] { new List<string> { "Coffee" }, 1m },
-                    new object[] { new List<string> { "Cheese Sandwich" }, 2m },
-                    new object[] { new List<string> { "Steak Sandwich" }, 0.5m },      
-                    // multiple items should return combined total
-                    new object[] { new List<string> { "Cola", "Coffee", "Cheese Sandwich" }, 3.5m }                    
+                    new object[] { new List<string> { "Cheese Sandwich" }, 2.2m },
+                    new object[] { new List<string> { "Steak Sandwich" }, 5.4m },      
+                    // multiple items should return combined total inc service charge
+                    new object[] { new List<string> { "Cola", "Coffee", "Cheese Sandwich" }, 3.85m },
+                    new object[] { new List<string> { "Cola", "Coffee", "Cheese Sandwich", "Steak Sandwich" }, 9.6 }
                 };
             }
         }
@@ -33,6 +34,8 @@ namespace CafeXTests
             var result = Till.CalculateBill(items);
             Assert.Equal(expected, result);
         }
+
+
 
         [Fact]
         public void ServiceCharge_Returns0Percent_AllDrinks()
@@ -68,6 +71,8 @@ namespace CafeXTests
             var serviceCharge = Till.ServiceCharge(total: 400m, orderType: OrderType.ContainsHotFood);
             Assert.Equal(20m, serviceCharge);
         }
+
+
 
         [Fact]
         public void GetOrderType_Returns_AllDrinks_IfAllDrinks()
