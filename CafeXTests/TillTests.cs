@@ -7,7 +7,7 @@ using Xunit.Extensions;
 namespace CafeXTests
 {
     public class TillTests
-    {   
+    {
         public static IEnumerable<object[]> CalculateBillData
         {
             get
@@ -32,6 +32,27 @@ namespace CafeXTests
         {
             var result = Till.CalculateBill(items);
             Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void CalculateServiceCharge_Returns0Percent_AllDrinks()
+        {
+            var serviceCharge = Till.ServiceCharge(total: 10m, orderType : OrderType.AllDrinks);
+            Assert.Equal(0, serviceCharge);
+        }
+
+        [Fact]
+        public void CalculateServiceCharge_Returns10Percent_Food()
+        {
+            var serviceCharge = Till.ServiceCharge(total: 10m, orderType: OrderType.ContainsFood);
+            Assert.Equal(1m, serviceCharge);
+        }
+
+        [Fact]
+        public void CalculateServiceCharge_Returns20Percent_HotFood()
+        {
+            var serviceCharge = Till.ServiceCharge(total: 10m, orderType: OrderType.ContainsHotFood);
+            Assert.Equal(2m, serviceCharge);
         }
 
 
