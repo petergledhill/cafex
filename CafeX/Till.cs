@@ -47,5 +47,23 @@ namespace CafeX
             var charge = Math.Round(total * multiplier, 2);
             return Math.Min(charge, MAXIMUM_SERVICE_CHARGE);
         }
+
+        /// <summary>
+        /// Work out if the order contains DrinksOnly, Food or HotFood
+        /// </summary>
+        public static OrderType GetOrderType(List<Product> products)
+        {
+            var allDrinks = products.All(p => p.Type == ProductType.Drink);
+
+            if (allDrinks)
+            {
+                return OrderType.AllDrinks;
+            }
+
+            var foodProducts = products.FindAll(p => p.Type == ProductType.Food);
+            var anyHotFood = foodProducts.Any(p => p.IsHot);
+
+            return anyHotFood ? OrderType.ContainsHotFood : OrderType.ContainsFood;            
+        }
     }
 }

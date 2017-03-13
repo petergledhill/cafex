@@ -35,38 +35,73 @@ namespace CafeXTests
         }
 
         [Fact]
-        public void CalculateServiceCharge_Returns0Percent_AllDrinks()
+        public void ServiceCharge_Returns0Percent_AllDrinks()
         {
             var serviceCharge = Till.ServiceCharge(total: 10m, orderType : OrderType.AllDrinks);
             Assert.Equal(0, serviceCharge);
         }
 
         [Fact]
-        public void CalculateServiceCharge_Returns10Percent_Food()
+        public void ServiceCharge_Returns10Percent_Food()
         {
             var serviceCharge = Till.ServiceCharge(total: 10m, orderType: OrderType.ContainsFood);
             Assert.Equal(1m, serviceCharge);
         }
 
         [Fact]
-        public void CalculateServiceCharge_Returns20Percent_HotFood()
+        public void ServiceCharge_Returns20Percent_HotFood()
         {
             var serviceCharge = Till.ServiceCharge(total: 10m, orderType: OrderType.ContainsHotFood);
             Assert.Equal(2m, serviceCharge);
         }
 
         [Fact]
-        public void CalculateServiceCharge_RoundsTo2Places()
+        public void ServiceCharge_RoundsTo2Places()
         {
             var serviceCharge = Till.ServiceCharge(total: 0.99m, orderType: OrderType.ContainsHotFood);
             Assert.Equal(0.2m, serviceCharge);
         }
 
         [Fact]
-        public void CalculateServiceCharge_ReturnsMaximum20PoundCharge()
+        public void ServiceCharge_ReturnsMaximum20PoundCharge()
         {
             var serviceCharge = Till.ServiceCharge(total: 400m, orderType: OrderType.ContainsHotFood);
             Assert.Equal(20m, serviceCharge);
+        }
+
+        [Fact]
+        public void GetOrderType_Returns_AllDrinks_IfAllDrinks()
+        {
+            var products = new List<Product>()
+            {
+                new Product(name : "Drink1", cost : 0, type : ProductType.Drink, isHot : false)
+            };
+            var orderType = Till.GetOrderType(products);
+            Assert.Equal(OrderType.AllDrinks, orderType);
+        }
+
+        [Fact]
+        public void GetOrderType_Returns_ContainsFood_IfAnyFood()
+        {
+            var products = new List<Product>()
+            {
+                new Product(name : "Drink1", cost : 0, type : ProductType.Drink, isHot : false),
+                new Product(name : "Cold Food1", cost : 0, type : ProductType.Food, isHot : false)
+            };
+            var orderType = Till.GetOrderType(products);
+            Assert.Equal(OrderType.ContainsFood, orderType);
+        }
+
+        [Fact]
+        public void GetOrderType_Returns_ContainsHotFood_IfAnyHotFood()
+        {
+            var products = new List<Product>()
+            {
+                new Product(name : "Cold Food1", cost : 0, type : ProductType.Food, isHot : false),
+                new Product(name : "Hot Food1", cost : 0, type : ProductType.Food, isHot : true)
+            };
+            var orderType = Till.GetOrderType(products);
+            Assert.Equal(OrderType.ContainsHotFood, orderType);
         }
 
 
